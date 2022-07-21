@@ -1,0 +1,23 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.rar
+
+
+# IntelliJ configuration files
+.idea/
+
+# Maven Output
+target/
+
+#In order to protect sensitive data the properties are kept out of VCS
+config/sensitive.properties
+
+
+#Shell files are set up in a system dependant way, thus, they should be excluded
+*.sh
