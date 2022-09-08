@@ -1,9 +1,5 @@
 package dev.ieris19.util;
 
-import dev.ieris19.commands.Command;
-import dev.ieris19.commands.InfoCommand;
-import dev.ieris19.commands.MinecraftCommand;
-import dev.ieris19.commands.ReportCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
@@ -12,48 +8,49 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
+/**
+ * A class containing miscellaneous utilities to be used by commands or related to commands
+ */
 public class CommandUtils {
-	private static final HashMap<String, Command> commandList = new HashMap<>();
+	/**
+	 * Constructs an error embed with a custom message for the user. The title will always be "Something went wrong!"
+	 *
+	 * @param customMessage the description of the embed
+	 *
+	 * @return an embed message telling the user about the error
+	 */
 	public static MessageEmbed errorEmbed(@NotNull String customMessage) {
-		if (!customMessage.equals(""))
-		return new EmbedBuilder().setColor(Color.RED).setTitle("Something went wrong!")
-				.setDescription(customMessage).build();
+		if (!customMessage.trim().equals(""))
+			return new EmbedBuilder().setColor(Color.RED).setTitle("Something went wrong!").setDescription(customMessage)
+					.build();
 		else
 			return errorEmbed();
 	}
 
+	/**
+	 * Creates a generic error embed telling the user that the command run into issues and that they should report to the
+	 * developer
+	 *
+	 * @return a generic error embed message
+	 */
 	public static MessageEmbed errorEmbed() {
-		return new EmbedBuilder().setColor(Color.RED).setTitle("Something went wrong!")
-				.setDescription("There has been a problem running this command. Please report this to the developer on " +
-												"Github at Ieris19/Assistant-Bot or by running \"/report\"").build();
+		return errorEmbed("There has been a problem running this command. Please report this to the developer on " +
+											"Github at Ieris19/Assistant-Bot or by running \"/report\"");
 	}
 
-	static {
-		commandList.put("report", new ReportCommand());
-		commandList.put("minecraft", new MinecraftCommand());
-		commandList.put("info", new InfoCommand());
-	}
-
-	public static String publicServerMachineIP() {
+	/**
+	 * Fetches the public IP address by querying <a href="https://checkip.amazonaws.com">AWS</a>
+	 *
+	 * @return the public IP address of the machine hosting the bot
+	 */
+	public static String publicServerMachineIP() throws IOException {
 		String publicAddress;
-		try {
-			URL websiteAddress = new URL("https://checkip.amazonaws.com");
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(websiteAddress.openStream()))) {
-				publicAddress = reader.readLine().trim();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
+		URL websiteAddress = new URL("https://checkip.amazonaws.com");
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(websiteAddress.openStream()))) {
+			publicAddress = reader.readLine().trim();
+			return publicAddress;
 		}
-		return publicAddress;
-	}
-
-	public static HashMap<String, Command> getCommandList() {
-		return commandList;
 	}
 }

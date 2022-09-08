@@ -6,13 +6,18 @@ import lib.ieris19.util.properties.FileProperties;
 
 import java.util.Scanner;
 
-
+/**
+ * Class container for the token
+ */
 public class Token {
+	/**
+	 * API token
+	 */
 	private static String TOKEN;
 
 	static {
 		try {
-			TOKEN = FileProperties.getInstance("sensitive").getProperty("api-token");
+			TOKEN = FileProperties.getInstance("token").getProperty("api-token");
 		} catch (IllegalArgumentException e) {
 			Log.getInstance().error("There is no such property in the config file");
 			Log.getInstance().info("Creating token property");
@@ -24,6 +29,9 @@ public class Token {
 		}
 	}
 
+	/**
+	 * Returns the token
+	 */
 	public static String get() {
 		return TOKEN;
 	}

@@ -1,4 +1,4 @@
-package dev.ieris19.commands;
+package dev.ieris19.commands.implementations;
 
 import dev.ieris19.util.CommandUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,7 +11,20 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 
 import java.awt.*;
 
+/**
+ * This class is used to create the /report command.<br>
+ * This command is used to report a bug or a user.
+ */
 public class ReportCommand implements Command {
+	/**
+	 * Instantiates a new Report command.
+	 */
+	public ReportCommand() {
+	}
+	/**
+	 * Execute the command.
+	 * @param event the command information in the form of event data
+	 */
 	@Override public void execute(SlashCommandInteractionEvent event) {
 		MessageEmbed reply = switch (event.getCommandPath()) {
 			case "report/bug" -> bugEmbed();
@@ -22,12 +35,22 @@ public class ReportCommand implements Command {
 		event.replyEmbeds(reply).setEphemeral(true).queue();
 	}
 
+	/**
+	 * Construct an embed with info about how to report user abuse
+	 *
+	 * @return the embed that will be sent to the user
+	 */
 	private MessageEmbed userEmbed() {
 		return new EmbedBuilder().setColor(Color.PINK)
 				.setTitle("User Report")
 				.setDescription("Please report any user abuse to the developer on Github at Ieris19/Assistant-Bot").build();
 	}
 
+	/**
+	 * Construct an embed with info about how to use the report command
+	 *
+	 * @return the embed that will be sent to the user
+	 */
 	public MessageEmbed bugEmbed() {
 		return new EmbedBuilder().setTitle("Report Errors", "https://github.com/Ieris19/assistant-bot")
 				.setColor(Color.RED)
@@ -40,6 +63,11 @@ public class ReportCommand implements Command {
 																							 "You can also request features here",false)).build();
 	}
 
+	/**
+	 * Construct an embed with info about how to use the report command
+	 *
+	 * @return the embed that will be sent to the user
+	 */
 	private MessageEmbed infoEmbed() {
 		return new EmbedBuilder().setColor(Color.ORANGE)
 				.setTitle("Report Command")
@@ -51,6 +79,16 @@ public class ReportCommand implements Command {
 				.build();
 	}
 
+	/**
+	 * Get the data needed to register the command to the Discord API.<br>
+	 * This method creates the following command and options: <br>
+	 * <ul>
+	 *   <li>report/bug</li>
+	 *   <li>report/user</li>
+	 * </ul>
+	 *
+	 * @return the command data as needed to be registered
+	 */
 	public CommandData create() {
 		CommandDataImpl reportCommand = new CommandDataImpl("report", "Communicate with the administrators");
 		reportCommand.addSubcommands(new SubcommandData("bug", "Report a bug"));

@@ -1,5 +1,6 @@
-package dev.ieris19.commands;
+package dev.ieris19.commands.implementations;
 
+import dev.ieris19.Bot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -16,8 +17,22 @@ import java.time.format.DateTimeFormatter;
 
 import static dev.ieris19.util.CommandUtils.errorEmbed;
 
+/**
+ * This class is used to handle the /info command<br>
+ * A command that will return information about multiple aspects of the bot, server, users, etc.
+ */
 public class InfoCommand implements Command {
 
+	/**
+	 * Instantiates a new Info command.
+	 */
+	public InfoCommand() {
+	}
+
+	/**
+	 * Execute the command
+	 * @param event the command information in the form of event data
+	 */
 	@Override public void execute(SlashCommandInteractionEvent event) {
 		MessageEmbed embed = switch (event.getCommandPath()) {
 			case "info" -> helpEmbed();
@@ -28,19 +43,30 @@ public class InfoCommand implements Command {
 		event.replyEmbeds(embed).setEphemeral(true).queue();
 	}
 
+	/**
+	 * Construct an embed with info about the bot and its purpose
+	 * @return the embed that will be sent to the user
+	 */
 	private MessageEmbed helpEmbed() {
 		return new EmbedBuilder().setTitle("Ieris19's Assistant Bot").setColor(Color.YELLOW)
-				.setDescription("I am a bot designed to carry out a variety of tasks, mostly improving your options as " +
-												"to how you can use Discord").build();
+				.setThumbnail(Bot.getInstance().getBot().getSelfUser().getAvatarUrl())
+				.setDescription("I am a bot designed to carry out a variety of tasks, mostly adding QoL options to " +
+												"improve your Discord experience").build();
 	}
 
+	/**
+	 * Construct an embed with info about the current guild
+	 * @param event the command information in the form of event data
+	 * @return the embed that will be sent to the user
+	 */
 	private MessageEmbed guildEmbed(SlashCommandInteractionEvent event) {
 		Guild guild = event.getGuild();
 		if (guild == null)
 			return errorEmbed();
+		Member owner = guild.retrieveOwner().complete();
 		return new EmbedBuilder().setTitle(guild.getName()).setColor(Color.BLUE).setDescription(guild.getDescription())
-				.setAuthor(guild.getOwner().getUser().getName(), guild.getVanityUrl(),
-									 guild.getOwner().getAvatarUrl()).setThumbnail(guild.getIconUrl())
+				.setAuthor(owner.getUser().getName(), null, owner.getUser().getAvatarUrl())
+				.setThumbnail(guild.getIconUrl())
 				.setImage(guild.getBannerUrl())
 				.addField("Guild Created",
 									guild.getTimeCreated().atZoneSameInstant(ZoneId.of("Z"))
@@ -49,16 +75,41 @@ public class InfoCommand implements Command {
 				.addField("Total Members", String.valueOf(guild.getMemberCount()), true).build();
 	}
 
+	/**
+	 * Construct an embed with info about the user that invoked the command
+	 * @param event the command information in the form of event data
+	 * @return the embed that will be sent to the user
+	 */
 	private MessageEmbed userEmbed(SlashCommandInteractionEvent event) {
+		MessageEmbed userEmbed;
 		try {
 			Member member = event.getOptions().get(0).getAsMember();
+			userEmbed = new EmbedBuilder().setTitle(member.getUser().getName()).setColor(Color.GREEN)
+					.setThumbnail(member.getUser().getAvatarUrl())
+					.addField("User Joined Server",
+										member.getTimeJoined().atZoneSameInstant(ZoneId.of("Z"))
+										.format(DateTimeFormatter.ofPattern("yyyy-MM-HH")), true)
+					.addBlankField(true)
+					.addField("Boosting Server",
+										member.isBoosting() ? "Boosting Server" : "Not Boosting Server", true).build();
 		} catch (IndexOutOfBoundsException | NullPointerException exception) {
 			return errorEmbed("The user was not provided or it is invalid, please, make sure input is correct" +
-												" before trying to \"/report bug\"");
+												" before trying to \"/report bug\". \nMake sure that the user is part of this guild too");
 		}
-		return errorEmbed("This command hasn't been fully implemented yet");
+		return userEmbed;
 	}
 
+	/**
+	 * Get the data needed to register the command to the Discord API.<br>
+	 * This method creates the following command and options: <br>
+	 * <ul>
+	 *   <li>info</li>
+	 *   <li>info/guild</li>
+	 *   <li>info/user</li>
+	 * </ul>
+	 *
+	 * @return the command data as needed to be registered
+	 */
 	@Override public CommandData create() {
 		CommandDataImpl infoCommand = new CommandDataImpl("info", "Get help about the bot");
 		infoCommand.addSubcommands(new SubcommandData("guild", "Get information on the current guild"));
