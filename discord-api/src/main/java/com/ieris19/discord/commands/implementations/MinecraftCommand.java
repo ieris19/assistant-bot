@@ -1,9 +1,9 @@
-package dev.ieris19.commands.implementations;
+package com.ieris19.discord.commands.implementations;
 
-import dev.ieris19.util.CommandUtils;
-import lib.ieris19.util.log.Log;
-import lib.ieris19.util.properties.DynamicProperties;
-import lib.ieris19.util.properties.FileProperties;
+import com.ieris19.discord.util.CommandUtils;
+import com.ieris19.lib.util.log.Log;
+import com.ieris19.lib.util.properties.DynamicProperties;
+import com.ieris19.lib.util.properties.FileProperties;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

@@ -1,6 +1,6 @@
-package dev.ieris19.util;
+package com.ieris19.discord.util;
 
-import lib.ieris19.util.log.Log;
+import com.ieris19.lib.util.log.Log;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,8 +10,17 @@ import java.util.regex.Pattern;
  * A class containing miscellaneous utilities related to the properties file
  */
 public class PropertyUtils {
-	private final static Pattern VALID = Pattern.compile("^[a-zA-Z0-9-]*$");
+	/**
+	 * Pattern used to validate the name to be used in the properties file
+	 */
+	private final static Pattern VALID = Pattern.compile("^[a-zA-Z0-9-\\.]*$");
+	/**
+	 * The pattern used to match whitespaces, backslashes and underscores
+	 */
 	private final static Pattern CONTAINS_WHITESPACE = Pattern.compile("[\s\\_]");
+	/**
+	 * The pattern used to match any character that is not a letter, a number or a dash
+	 */
 	private final static Pattern CONTAINS_NON_STANDARD = Pattern.compile("[^a-zA-Z0-9-]");
 
 	/**
@@ -25,6 +34,11 @@ public class PropertyUtils {
 		return guildPropertyName(guild.getName());
 	}
 
+	/**
+	 * Recursively processes the guild name to be saved in the properties file
+	 * @param name the name to be processed
+	 * @return the next stage of the name to be saved in the properties file
+	 */
 	public static String guildPropertyName(@NotNull String name) {
 		if (VALID.matcher(name).matches()) {
 			name = name.toLowerCase();

@@ -1,8 +1,8 @@
-package dev.ieris19.commands;
+package com.ieris19.discord.commands;
 
-import dev.ieris19.commands.implementations.Command;
-import lib.ieris19.util.ClassUtils;
-import lib.ieris19.util.log.Log;
+import com.ieris19.discord.commands.implementations.Command;
+import com.ieris19.lib.util.ClassUtils;
+import com.ieris19.lib.util.log.Log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

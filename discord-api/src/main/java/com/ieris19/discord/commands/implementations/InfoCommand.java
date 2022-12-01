@@ -1,6 +1,6 @@
-package dev.ieris19.commands.implementations;
+package com.ieris19.discord.commands.implementations;
 
-import dev.ieris19.Bot;
+import com.ieris19.discord.Bot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -15,7 +15,7 @@ import java.awt.*;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import static dev.ieris19.util.CommandUtils.errorEmbed;
+import static com.ieris19.discord.util.CommandUtils.errorEmbed;
 
 /**
  * This class is used to handle the /info command<br>
@@ -35,7 +35,7 @@ public class InfoCommand implements Command {
 	 */
 	@Override public void execute(SlashCommandInteractionEvent event) {
 		MessageEmbed embed = switch (event.getCommandPath()) {
-			case "info" -> helpEmbed();
+			case "info/bot" -> botEmbed();
 			case "info/guild" -> guildEmbed(event);
 			case "info/user" -> userEmbed(event);
 			default -> errorEmbed();
@@ -47,7 +47,7 @@ public class InfoCommand implements Command {
 	 * Construct an embed with info about the bot and its purpose
 	 * @return the embed that will be sent to the user
 	 */
-	private MessageEmbed helpEmbed() {
+	private MessageEmbed botEmbed() {
 		return new EmbedBuilder().setTitle("Ieris19's Assistant Bot").setColor(Color.YELLOW)
 				.setThumbnail(Bot.getInstance().getBot().getSelfUser().getAvatarUrl())
 				.setDescription("I am a bot designed to carry out a variety of tasks, mostly adding QoL options to " +
@@ -111,10 +111,11 @@ public class InfoCommand implements Command {
 	 * @return the command data as needed to be registered
 	 */
 	@Override public CommandData create() {
-		CommandDataImpl infoCommand = new CommandDataImpl("info", "Get help about the bot");
+		CommandDataImpl infoCommand = new CommandDataImpl("info", "Get information from the bot");
 		infoCommand.addSubcommands(new SubcommandData("guild", "Get information on the current guild"));
 		infoCommand.addSubcommands(new SubcommandData("user", "Get the information for a specific user")
 							 .addOption(OptionType.USER, "name","User whose info must be retrieved", true));
+		infoCommand.addSubcommands(new SubcommandData("bot", "Get information on the bot"));
 		return infoCommand;
 	}
 }

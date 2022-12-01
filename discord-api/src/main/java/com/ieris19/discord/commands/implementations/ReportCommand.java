@@ -1,6 +1,6 @@
-package dev.ieris19.commands.implementations;
+package com.ieris19.discord.commands.implementations;
 
-import dev.ieris19.util.CommandUtils;
+import com.ieris19.discord.util.CommandUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

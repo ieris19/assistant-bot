@@ -4,16 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.ieris19</groupId>
-    <artifactId>Discord_Bot</artifactId>
-    <version>2.0</version>
+    <groupId>com.ieris19.discord</groupId>
+    <artifactId>ieris-assistant</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>discord-api</module>
+    </modules>
+
     <properties>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <ieris.java.version>19</ieris.java.version>
+        <maven.compiler.source>${ieris.java.version}</maven.compiler.source>
+        <maven.compiler.target>${ieris.java.version}</maven.compiler.target>
     </properties>
 
     <name>Ieris19's Assistant</name>
-    <description>Managing servers for Ieris19 since 2022</description>
+    <description>Helping in servers for Ieris19 since 2022</description>
     <url>https://github.com/Ieris19/assistant-bot</url>
     <inceptionYear>2022</inceptionYear>
     <licenses>
@@ -55,7 +61,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>dev.ieris19.Start</mainClass>
+                            <mainClass>com.ieris19.discord.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -68,36 +74,12 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.16</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
-        </dependency>
+        <!-- Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.9.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>lib.ieris19.util</groupId>
-            <artifactId>log</artifactId>
-            <version>1.2.0-release</version>
-        </dependency>
-        <dependency>
-            <groupId>lib.ieris19.util</groupId>
-            <artifactId>properties</artifactId>
-            <version>2.1.0-release</version>
-        </dependency>
-        <dependency>
-            <groupId>lib.ieris19.util</groupId>
-            <artifactId>reflection</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

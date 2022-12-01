@@ -1,4 +1,4 @@
-package dev.ieris19.util;
+package com.ieris19.discord.util;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;

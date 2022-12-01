@@ -1,12 +1,13 @@
-package dev.ieris19.commands;
+package com.ieris19.discord.commands;
 
-import dev.ieris19.commands.implementations.Command;
-import dev.ieris19.util.LogUtils;
-import lib.ieris19.util.log.Log;
+import com.ieris19.discord.util.CommandUtils;
+import com.ieris19.discord.util.LogUtils;
+import com.ieris19.discord.commands.implementations.Command;
+import com.ieris19.lib.util.log.Log;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import static dev.ieris19.util.CommandUtils.errorEmbed;
+import static com.ieris19.discord.util.CommandUtils.errorEmbed;
 
 /**
  * The command listener class is a forwarder that will listen to all slash commands and forward them to the correct
@@ -24,8 +25,8 @@ public class CommandListener extends ListenerAdapter {
 		if (command != null) {
 			command.execute(event);
 		} else {
-			event.replyEmbeds(errorEmbed("The command received by the bot cannot be found or the bot" +
-																	 " had trouble parsing it")).queue();
+			event.replyEmbeds(CommandUtils.errorEmbed("The command received by the bot cannot be found or the bot" +
+																								" had trouble parsing it")).queue();
 		}
 		Log.getInstance().log(LogUtils.commandLog(event));
 	}

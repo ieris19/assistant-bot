@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.ieris19.discord</groupId>
+        <artifactId>ieris-assistant</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>discord-api</artifactId>
+
+    <name>Discord API</name>
+    <description>The brain of the Discord Bot</description>
+
+    <dependencies>
+        <!-- Logging -->
+        <dependency>
+            <groupId>com.ieris19.lib.util</groupId>
+            <artifactId>slf4j-ierislog</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ieris19.lib.util</groupId>
+            <artifactId>ierislog</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <!-- Forcing dependency version, as JDA uses an older version -->
+            <version>2.0.5</version>
+        </dependency>
+
+        <!-- Configurations -->
+        <dependency>
+            <groupId>com.ieris19.lib.files</groupId>
+            <artifactId>config</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Utilities -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ieris19.lib.reflection</groupId>
+            <artifactId>reflection-utils</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Discord API -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>5.0.0-beta.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <!-- jackson-databind is affected by a vulnerability in the version required by
+             the JDA, so explicit declaration is needed to force update-->
+            <version>2.14.1</version>
+        </dependency>
+    </dependencies>
+</project>

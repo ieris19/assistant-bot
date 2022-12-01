@@ -1,8 +1,8 @@
-package dev.ieris19.util;
+package com.ieris19.discord.util;
 
-import lib.ieris19.util.cli.TextColor;
-import lib.ieris19.util.log.Log;
-import lib.ieris19.util.properties.FileProperties;
+import com.ieris19.lib.util.cli.TextColor;
+import com.ieris19.lib.util.log.Log;
+import com.ieris19.lib.util.properties.FileProperties;
 
 import java.util.Scanner;
 

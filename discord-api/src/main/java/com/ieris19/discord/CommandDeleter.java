@@ -1,8 +1,8 @@
-package dev.ieris19;
+package com.ieris19.discord;
 
-import dev.ieris19.util.Token;
-import lib.ieris19.util.log.Log;
-import lib.ieris19.util.properties.FileProperties;
+import com.ieris19.discord.util.Token;
+import com.ieris19.lib.util.log.Log;
+import com.ieris19.lib.util.properties.FileProperties;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
