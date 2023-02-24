@@ -4,6 +4,7 @@ import com.ieris19.discord.util.CommandUtils;
 import com.ieris19.discord.util.LogUtils;
 import com.ieris19.discord.commands.implementations.Command;
 import com.ieris19.lib.util.log.Log;
+import com.ieris19.lib.util.log.core.IerisLog;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -21,13 +22,13 @@ public class CommandListener extends ListenerAdapter {
 	 * @param event the Slash Command event that has been received from the DiscordAPI
 	 */
 	@Override public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		Command command = CommandLoader.getInstance().getCommandList().get(event.getCommandPath().split("/")[0]);
+		Command command = CommandLoader.getInstance().getCommandList().get(event.getFullCommandName().split(" ")[0]);
 		if (command != null) {
 			command.execute(event);
 		} else {
 			event.replyEmbeds(CommandUtils.errorEmbed("The command received by the bot cannot be found or the bot" +
 																								" had trouble parsing it")).queue();
 		}
-		Log.getInstance().log(LogUtils.commandLog(event));
+		IerisLog.getInstance().trace(LogUtils.commandLog(event));
 	}
 }

@@ -26,10 +26,10 @@ public class ReportCommand implements Command {
 	 * @param event the command information in the form of event data
 	 */
 	@Override public void execute(SlashCommandInteractionEvent event) {
-		MessageEmbed reply = switch (event.getCommandPath()) {
-			case "report/bug" -> bugEmbed();
-			case "report/user" -> userEmbed();
+		MessageEmbed reply = switch (event.getFullCommandName()) {
 			case "report" -> infoEmbed();
+			case "report bug" -> bugEmbed();
+			case "report user" -> userEmbed();
 			default -> CommandUtils.errorEmbed();
 		};
 		event.replyEmbeds(reply).setEphemeral(true).queue();

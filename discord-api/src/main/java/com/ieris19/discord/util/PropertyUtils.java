@@ -1,6 +1,7 @@
 package com.ieris19.discord.util;
 
 import com.ieris19.lib.util.log.Log;
+import com.ieris19.lib.util.log.core.IerisLog;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +43,7 @@ public class PropertyUtils {
 	public static String guildPropertyName(@NotNull String name) {
 		if (VALID.matcher(name).matches()) {
 			name = name.toLowerCase();
-			Log.getInstance().info("Guild name: " + name + ": valid");
+			IerisLog.getInstance().info("Guild name: " + name + ": valid");
 			return name;
 		}
 		name = CONTAINS_WHITESPACE.matcher(name).replaceAll("-");

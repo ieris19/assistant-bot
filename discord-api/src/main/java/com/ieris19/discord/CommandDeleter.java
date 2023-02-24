@@ -1,8 +1,8 @@
 package com.ieris19.discord;
 
 import com.ieris19.discord.util.Token;
-import com.ieris19.lib.util.log.Log;
-import com.ieris19.lib.util.properties.FileProperties;
+import com.ieris19.lib.util.log.core.IerisLog;
+import com.ieris19.lib.files.config.FileProperties;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -27,21 +27,21 @@ public class CommandDeleter {
 	 * @throws IOException if the config file cannot be read/written to
 	 */
 	public static void main(String[] args) throws LoginException, InterruptedException, IOException {
-		Log.getInstance().setName("IerisBotCleaner");
+		IerisLog.getInstance("IerisBotCleaner");
 		String token = Token.get();
-		Log.getInstance().success("Imported Token");
+		IerisLog.getInstance().success("Imported Token");
 		JDABuilder builder = JDABuilder.createLight(token);
-		Log.getInstance().success("Bot Initialized");
+		IerisLog.getInstance().success("Bot Initialized");
 		JDA botInstance = builder.build();
 		botInstance.awaitReady();
 		try (FileProperties guildsProperties = FileProperties.getInstance("guilds")) {
 			for (Guild guild : botInstance.getGuilds()) {
 				if (guild != null) {
-					Log.getInstance().warning("Disabling guild " + guild.getName());
+					IerisLog.getInstance().warning("Disabling guild " + guild.getName());
 					resetCommands(guild);
 					guild.leave().queue();
 					guildsProperties.deleteProperty(guild.getName());
-					Log.getInstance().success("Successfully disabled guild");
+					IerisLog.getInstance().success("Successfully disabled guild");
 				}
 			}
 		}
@@ -57,7 +57,7 @@ public class CommandDeleter {
 		if (commands.isEmpty())
 			return;
 		for (Command command : commands) {
-			Log.getInstance().log("Removing command: " + '/' + command.getName());
+			IerisLog.getInstance().trace("Removing command: " + '/' + command.getName());
 			guild.deleteCommandById(command.getId()).complete();
 		}
 	}

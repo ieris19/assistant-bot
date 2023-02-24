@@ -46,30 +46,36 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
-                        <id>bundle</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.ieris19.discord.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
             </plugin>
+            <!--<plugin>
+                <groupId>com.ieris19.lib.plugins</groupId>
+                <artifactId>installer-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-installer</id>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>${project.basedir}/config</include>
+                    </includes>
+                    <excludes>
+                        <exclude>${project.basedir}/config/token.properties</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 

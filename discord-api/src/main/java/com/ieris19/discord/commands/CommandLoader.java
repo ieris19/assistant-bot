@@ -1,17 +1,18 @@
 package com.ieris19.discord.commands;
 
 import com.ieris19.discord.commands.implementations.Command;
-import com.ieris19.lib.util.ClassUtils;
-import com.ieris19.lib.util.log.Log;
+import com.ieris19.lib.reflection.util.ClassUtils;
+import com.ieris19.lib.util.log.core.IerisLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Set;
 
 /**
- * A class that loads all the commands in the {@link dev.ieris19.commands.implementations} package and stores them in a
- * {@link HashMap} for easy access. This way, the commands can be accessed by their name. This class also provides a
- * method to get all the implemented command classes to automatically generate listeners for the commands.
+ * A class that loads all the commands in the {@link com.ieris19.discord.commands.implementations command implementations}
+ * package and stores them in a {@link HashMap} for easy access. This way, the commands can be accessed by their name.
+ * This class also provides a method to get all the implemented command classes to automatically generate listeners for
+ * the commands.
  */
 public class CommandLoader {
 	/**
@@ -61,7 +62,7 @@ public class CommandLoader {
 
 	/**
 	 * Adds commands to the {@link #commandList} on the classes in the
-	 * {@link dev.ieris19.commands.implementations implementations package} that implement commands
+	 * {@link com.ieris19.discord.commands.implementations command implementations} package that implement commands
 	 */
 	public void loadCommands() {
 		Set<Class<?>> classes;
@@ -83,6 +84,6 @@ public class CommandLoader {
 			String commandName = commandClass.getSimpleName();
 			commandList.put(commandName.replaceAll("Command", "").toLowerCase(), command);
 		});
-		Log.getInstance().info("Loaded " + commandList.size() + " commands: \n" + commandList.keySet());
+		IerisLog.getInstance().info("Loaded " + commandList.size() + " commands: \n" + commandList.keySet());
 	}
 }

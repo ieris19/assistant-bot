@@ -1,9 +1,9 @@
 package com.ieris19.discord.commands.implementations;
 
 import com.ieris19.discord.util.CommandUtils;
-import com.ieris19.lib.util.log.Log;
-import com.ieris19.lib.util.properties.DynamicProperties;
-import com.ieris19.lib.util.properties.FileProperties;
+import com.ieris19.lib.files.config.DynamicProperties;
+import com.ieris19.lib.files.config.FileProperties;
+import com.ieris19.lib.util.log.core.IerisLog;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -29,7 +29,7 @@ public class MinecraftCommand implements Command {
 	 * @param event the command information in the form of event data
 	 */
 	@Override public void execute(SlashCommandInteractionEvent event) {
-		MessageEmbed embed = switch (event.getCommandPath()) {
+		MessageEmbed embed = switch (event.getFullCommandName()) {
 			case "minecraft" -> serverFetch(event);
 			default -> CommandUtils.errorEmbed();
 		};
@@ -59,7 +59,7 @@ public class MinecraftCommand implements Command {
 			return embed.build();
 		} catch (IOException e) {
 			event.replyEmbeds(CommandUtils.errorEmbed()).queue();
-			Log.getInstance().error("Error fetching Minecraft Server IP");
+			IerisLog.getInstance().error("Error fetching Minecraft Server IP");
 			e.printStackTrace();
 		}
 		return CommandUtils.errorEmbed();
@@ -85,20 +85,24 @@ public class MinecraftCommand implements Command {
 					throw new IllegalStateException("A property is missing from the minecraft.properties file");
 				}
 			}
-		} catch (IOException | IllegalStateException | IllegalArgumentException e) {
-			Log.getInstance().error("Problems encountered with: minecraft.properties " + e.getMessage());
-			Log.getInstance().info("Recreating minecraft.properties file, please fill in the missing values");
+		} catch (IllegalStateException | IllegalArgumentException missingProperty) {
+			IerisLog.getInstance().error("Problems encountered with: minecraft.properties " + missingProperty.getMessage());
+			IerisLog.getInstance().info("Recreating minecraft.properties file, please fill in the missing values");
 			try (FileProperties minecraft = FileProperties.getInstance("minecraft")) {
-				minecraft.getProperties().keySet().forEach(key -> minecraft.deleteProperty((String) key));
-				minecraft.createProperty("server-port", "25565");
-				minecraft.createProperty("status", "OFFLINE");
-				minecraft.createProperty("instance", "");
-				minecraft.createProperty("map", "");
-				minecraft.createProperty("difficulty", "");
+				minecraft.createDefaultProperties(new String[][] {
+						{"server-port", "25565"},
+						{"status", "OFFLINE"},
+						{"instance", ""},
+						{"map", ""},
+						{"difficulty", ""},
+				});
 			} catch (IOException ioException) {
 				ioException.printStackTrace();
-				Log.getInstance().error("Error creating minecraft.properties file");
+				IerisLog.getInstance().error("Error creating minecraft.properties file");
 			}
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+			IerisLog.getInstance().error("Input/Output error with minecraft.properties file");
 		}
 		return new CommandDataImpl("minecraft", "Get information about the server");
 	}

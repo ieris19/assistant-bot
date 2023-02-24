@@ -42,7 +42,7 @@ public class LogUtils {
 		 * @return the name of the command
 		 */
 		private String name() {
-			return '/' + command.getCommandPath();
+			return '"' + '/' + command.getFullCommandName() + '"';
 		}
 
 		/**
@@ -60,7 +60,7 @@ public class LogUtils {
 		 * @return the name of the member who issued the command
 		 */
 		private String member() {
-			return '@' + this.command.getMember().getUser().getName();
+			return '@' + this.command.getUser().getName();
 		}
 
 		/**

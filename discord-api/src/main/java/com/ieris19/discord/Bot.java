@@ -5,14 +5,14 @@ import com.ieris19.discord.commands.CommandLoader;
 import com.ieris19.discord.commands.implementations.Command;
 import com.ieris19.discord.util.PropertyUtils;
 import com.ieris19.discord.util.Token;
-import com.ieris19.lib.util.log.Log;
-import com.ieris19.lib.util.properties.FileProperties;
+import com.ieris19.lib.files.config.FileProperties;
+import com.ieris19.lib.util.log.core.IerisLog;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -61,21 +61,21 @@ public class Bot {
 	private Bot() {
 		String token = Token.get();
 		JDABuilder builder = JDABuilder.createLight(token);
-		Log.getInstance().success("Imported Token");
+		IerisLog.getInstance().success("Imported Token");
 		configure(builder);
 		try {
 			botInstance = builder.build();
-			Log.getInstance().success("Discord Bot Build completed");
+			IerisLog.getInstance().success("Discord Bot Build completed");
 			botInstance.awaitReady();
-		} catch (LoginException e) {
-			Log.getInstance().error("Fatal error during build. Shutting down" + Arrays.toString(e.getStackTrace()));
+		} catch (InvalidTokenException e) {
+			IerisLog.getInstance().error("Fatal error during build. Shutting down" + Arrays.toString(e.getStackTrace()));
 			System.exit(120);
 		} catch (InterruptedException e) {
-			Log.getInstance().error("Bot thread interrupted while not ready");
+			IerisLog.getInstance().error("Bot thread interrupted while not ready");
 			throw new RuntimeException(e);
 		}
 		guildSetup();
-		Log.getInstance().success("Initialization of the bot complete");
+		IerisLog.getInstance().success("Initialization of the bot complete");
 	}
 
 	/**
@@ -86,21 +86,21 @@ public class Bot {
 			List<Guild> instanceGuilds = botInstance.getGuilds();
 
 			for (Guild guild : instanceGuilds) {
-				Log.getInstance().info("Detected guild: " + guild.getName());
+				IerisLog.getInstance().info("Detected guild: " + guild.getName());
 				try {
 					String guildKey = PropertyUtils.guildPropertyName(guild);
 					guildProperties.createProperty(guildKey, guild.getId());
-					Log.getInstance().info("Added guild to list of guilds");
+					IerisLog.getInstance().info("Added guild to list of guilds");
 				} catch (IllegalArgumentException exception) {
-					Log.getInstance().info("Guild already initialized");
+					IerisLog.getInstance().info("Guild already initialized");
 				}
 				insertCommands(guild);
-				Log.getInstance().success("Joined guild " + guild.getName());
+				IerisLog.getInstance().success("Joined guild " + guild.getName());
 			}
 		} catch (IOException e) {
-			Log.getInstance().error("There has been an I/O error while initializing the guild properties");
+			IerisLog.getInstance().error("There has been an I/O error while initializing the guild properties");
 		} finally {
-			Log.getInstance().success("Guild initialization finished");
+			IerisLog.getInstance().success("Guild initialization finished");
 		}
 	}
 
@@ -133,10 +133,10 @@ public class Bot {
 			for (String commandName : CommandLoader.getInstance().getCommandList().keySet()) {
 				Command command = CommandLoader.getInstance().getCommandList().get(commandName);
 				if (command != null) {
-					Log.getInstance().log("Inserting command /" + commandName + " into guild");
+					IerisLog.getInstance().trace("Inserting command /" + commandName + " into guild");
 					guild.upsertCommand(command.create()).queue();
 				} else {
-					Log.getInstance().error("Command " + commandName + " is null");
+					IerisLog.getInstance().error("Command " + commandName + " is null");
 				}
 			}
 		}

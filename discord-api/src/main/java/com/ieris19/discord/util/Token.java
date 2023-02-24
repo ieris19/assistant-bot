@@ -1,8 +1,8 @@
 package com.ieris19.discord.util;
 
-import com.ieris19.lib.util.cli.TextColor;
-import com.ieris19.lib.util.log.Log;
-import com.ieris19.lib.util.properties.FileProperties;
+import com.ieris19.lib.common.cli.TextColor;
+import com.ieris19.lib.files.config.FileProperties;
+import com.ieris19.lib.util.log.core.IerisLog;
 
 import java.util.Scanner;
 
@@ -19,13 +19,13 @@ public class Token {
 		try {
 			TOKEN = FileProperties.getInstance("token").getProperty("api-token");
 		} catch (IllegalArgumentException e) {
-			Log.getInstance().error("There is no such property in the config file");
-			Log.getInstance().info("Creating token property");
+			IerisLog.getInstance().error("There is no such property in the config file");
+			IerisLog.getInstance().info("Creating token property");
 			Scanner input = new Scanner(System.in);
-			Log.getInstance().info("Please enter your token");
+			IerisLog.getInstance().info("Please enter your token");
 			TextColor.print("Please enter your token ", TextColor.YELLOW);
-			FileProperties.getInstance("sensitive").createProperty("api-token", input.nextLine());
-			TOKEN = FileProperties.getInstance("sensitive").getProperty("api-token");
+			FileProperties.getInstance("token").createProperty("api-token", input.nextLine());
+			TOKEN = FileProperties.getInstance("token").getProperty("api-token");
 		}
 	}
 

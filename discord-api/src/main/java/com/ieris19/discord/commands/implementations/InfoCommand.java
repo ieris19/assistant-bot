@@ -5,13 +5,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 
-import java.awt.*;
+import java.awt.Color;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
@@ -34,10 +35,10 @@ public class InfoCommand implements Command {
 	 * @param event the command information in the form of event data
 	 */
 	@Override public void execute(SlashCommandInteractionEvent event) {
-		MessageEmbed embed = switch (event.getCommandPath()) {
-			case "info/bot" -> botEmbed();
-			case "info/guild" -> guildEmbed(event);
-			case "info/user" -> userEmbed(event);
+		MessageEmbed embed = switch (event.getFullCommandName()) {
+			case "info bot" -> botEmbed();
+			case "info guild" -> guildEmbed(event);
+			case "info user" -> userEmbed(event);
 			default -> errorEmbed();
 		};
 		event.replyEmbeds(embed).setEphemeral(true).queue();
@@ -84,8 +85,12 @@ public class InfoCommand implements Command {
 		MessageEmbed userEmbed;
 		try {
 			Member member = event.getOptions().get(0).getAsMember();
-			userEmbed = new EmbedBuilder().setTitle(member.getUser().getName()).setColor(Color.GREEN)
-					.setThumbnail(member.getUser().getAvatarUrl())
+			User user = event.getOptions().get(0).getAsUser();
+			if (member == null) {
+				throw new NullPointerException();
+			}
+			userEmbed = new EmbedBuilder().setTitle(user.getName()).setColor(Color.GREEN)
+					.setThumbnail(user.getAvatarUrl())
 					.addField("User Joined Server",
 										member.getTimeJoined().atZoneSameInstant(ZoneId.of("Z"))
 										.format(DateTimeFormatter.ofPattern("yyyy-MM-HH")), true)
@@ -93,8 +98,9 @@ public class InfoCommand implements Command {
 					.addField("Boosting Server",
 										member.isBoosting() ? "Boosting Server" : "Not Boosting Server", true).build();
 		} catch (IndexOutOfBoundsException | NullPointerException exception) {
-			return errorEmbed("The user was not provided or it is invalid, please, make sure input is correct" +
-												" before trying to \"/report bug\". \nMake sure that the user is part of this guild too");
+			return errorEmbed("The user was not provided or it is not a member of this guild, please, make sure " +
+												"input is correct before trying to \"/report bug\". " + '\n'
+												+ "Make sure that the user is part of this guild too");
 		}
 		return userEmbed;
 	}
@@ -104,8 +110,8 @@ public class InfoCommand implements Command {
 	 * This method creates the following command and options: <br>
 	 * <ul>
 	 *   <li>info</li>
-	 *   <li>info/guild</li>
-	 *   <li>info/user</li>
+	 *   <li>info guild</li>
+	 *   <li>info user</li>
 	 * </ul>
 	 *
 	 * @return the command data as needed to be registered
